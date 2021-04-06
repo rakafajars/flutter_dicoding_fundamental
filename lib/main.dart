@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dicoding_fundamental/article_web_view.dart';
+import 'package:flutter_dicoding_fundamental/detail_article.dart';
+import 'package:flutter_dicoding_fundamental/m_article.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,181 +17,73 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/',
+      initialRoute: NewsListPage.routeName,
       routes: {
-        '/': (context) => FirstScreen(),
-        '/secondScreen': (context) => SecondScreen(),
-        '/secondScreenWithData': (context) => SecondScreenWithData(),
-        '/returnDataScreen': (context) => ReturnDataScreen(),
-        '/replacementScreen': (context) => ReplacementScreen(),
-        '/anotherScreen': (context) => AnotherScreen(),
+        NewsListPage.routeName: (context) => NewsListPage(),
+        ArticleDetailPage.routeName: (context) => ArticleDetailPage(
+              article: ModalRoute.of(context).settings.arguments,
+            ),
+        ArticleWebView.routeName: (context) => ArticleWebView(
+              article: ModalRoute.of(context).settings.arguments,
+            ),
       },
     );
   }
 }
 
-class FirstScreen extends StatelessWidget {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+class NewsListPage extends StatelessWidget {
+  static const routeName = '/article_list';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Navigation & Routing'),
+        title: Text('News Apps'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            RaisedButton(
-              child: Text('Go to Second Screen'),
-              onPressed: () {
-                Navigator.pushNamed(context, '/secondScreen');
-              },
-            ),
-            RaisedButton(
-              child: Text('Navigation wih Data'),
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  '/secondScreenWithData',
-                  arguments: 'Helo Raka',
-                );
-              },
-            ),
-            RaisedButton(
-              child: Text('Return Data from Another Screen'),
-              onPressed: () async {
-                final result =
-                await Navigator.pushNamed(context, '/returnDataScreen');
-
-                SnackBar snackbar = SnackBar(
-                  content: Text(result),
-                );
-
-                _scaffoldKey.currentState.showSnackBar(snackbar);
-              },
-            ),
-            RaisedButton(
-              child: Text('Replace Screen'),
-              onPressed: () {
-                Navigator.pushNamed(context, '/replacementScreen');
-              },
-            ),
-          ],
+      body: FutureBuilder<String>(
+        future: DefaultAssetBundle.of(context).loadString(
+          'assets/articles.json',
         ),
+        builder: (context, snapshot) {
+          final List<Article> articles = parseArtciles(snapshot.data);
+          return ListView.builder(
+            itemCount: articles.length,
+            itemBuilder: (context, int index) {
+              return _buildArticleItem(
+                context,
+                articles[index],
+              );
+            },
+          );
+        },
       ),
     );
   }
-}
 
-class SecondScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: RaisedButton(
-          child: Text('Back'),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+  Widget _buildArticleItem(
+    BuildContext context,
+    Article article,
+  ) {
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 16.0,
+        vertical: 8.0,
       ),
-    );
-  }
-}
-
-class SecondScreenWithData extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final String data = ModalRoute.of(context).settings.arguments;
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(data),
-            RaisedButton(
-              child: Text('Back'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
+      leading: Image.network(
+        article.urlToImage,
+        width: 100,
       ),
-    );
-  }
-}
-
-class ReturnDataScreen extends StatelessWidget {
-  final textController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: TextField(
-                controller: textController,
-                decoration: InputDecoration(labelText: 'Enter your name'),
-              ),
-            ),
-            RaisedButton(
-              child: Text('Send'),
-              onPressed: () {
-                Navigator.pop(
-                  context,
-                  textController.text,
-                );
-              },
-            ),
-          ],
-        ),
+      title: Text(article.title),
+      subtitle: Text(
+        article.author,
       ),
-    );
-  }
-}
-
-class ReplacementScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: RaisedButton(
-          child: Text('Open Another Screen'),
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, '/anotherScreen');
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class AnotherScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('Back to First Screen'),
-            RaisedButton(
-              child: Text('Back'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          ArticleDetailPage.routeName,
+          arguments: article,
+        );
+      },
     );
   }
 }
