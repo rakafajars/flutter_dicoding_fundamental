@@ -40,6 +40,8 @@ class NewsListPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('News Apps'),
       ),
+      /// Future -> Widget yang membangun widget berdasarkan interkasi terbaru
+      /// dengan objek future
       body: FutureBuilder<String>(
         future: DefaultAssetBundle.of(context).loadString(
           'assets/articles.json',
