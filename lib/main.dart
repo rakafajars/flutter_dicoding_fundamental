@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dicoding_fundamental/article_web_view.dart';
 import 'package:flutter_dicoding_fundamental/detail_article.dart';
 import 'package:flutter_dicoding_fundamental/m_article.dart';
+import 'package:flutter_dicoding_fundamental/theme/style.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,8 +15,26 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        primaryColor: primaryColor,
+        accentColor: secondaryColor,
+        scaffoldBackgroundColor: Colors.white,
+        textTheme: myTextTheme,
+        appBarTheme: AppBarTheme(
+          textTheme: myTextTheme.apply(
+            bodyColor: Colors.black,
+          ),
+          elevation: 0.0,
+        ),
+        buttonTheme: ButtonThemeData(
+          buttonColor: secondaryColor,
+          textTheme: ButtonTextTheme.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(0),
+            ),
+          ),
+        ),
       ),
       initialRoute: NewsListPage.routeName,
       routes: {
@@ -40,6 +59,7 @@ class NewsListPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('News Apps'),
       ),
+
       /// Future -> Widget yang membangun widget berdasarkan interkasi terbaru
       /// dengan objek future
       body: FutureBuilder<String>(
