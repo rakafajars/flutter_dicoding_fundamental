@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dicoding_fundamental/sliver_list_page.dart';
 import 'package:flutter_dicoding_fundamental/strings.dart';
 
 void main() {
@@ -12,10 +13,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHome(),
+      home: LearningPathPage(),
     );
   }
 }
