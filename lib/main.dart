@@ -16,23 +16,46 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: AnimationPage(),
+      // home: AnimationPage(),
+
+      home: AnimateRotation(),
     );
   }
 }
 
-class AnimationPage extends StatefulWidget {
+class AnimateRotation extends StatefulWidget {
   @override
-  _AnimationPageState createState() => _AnimationPageState();
+  _AnimateRotationState createState() => _AnimateRotationState();
 }
 
-class _AnimationPageState extends State<AnimationPage> {
-  bool _isBag = false;
-  double _size = 100.0;
+class _AnimateRotationState extends State<AnimateRotation>
+    with TickerProviderStateMixin {
+  AnimationController _controller;
+  AnimationController _iconController;
+  bool _isRotating = false;
 
-  Tween _animationTween = Tween<double>(begin: 0, end: pi * 2);
-  Tween _colorTween = ColorTween(begin: Colors.blue, end: Colors.purple);
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 3),
+    )..repeat();
 
+    _iconController = AnimationController(
+      vsync: this,
+      duration: Duration(
+        milliseconds: 500,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+    _iconController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,40 +65,95 @@ class _AnimationPageState extends State<AnimationPage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TweenAnimationBuilder<Color>(
-              // tween: _animationTween,
-              tween: _colorTween,
-              duration: Duration(seconds: 3),
-              builder: (context, Color value, child) {
-                return Container(
-                  color: value,
-                  height: _size,
-                  width: _size,
-                );                // return Transform.rotate(
-                //   angle: value,
-                //   child: AnimatedContainer(
-                //     duration: Duration(seconds: 1),
-                //     color: Colors.blue,
-                //     height: _size,
-                //     width: _size,
-                //   ),
-                // );
-              },
+          children: <Widget>[
+            RotationTransition(
+              turns: _controller,
+              child: Container(
+                padding: EdgeInsets.all(16),
+                child: FlutterLogo(
+                  size: 100,
+                ),
+              ),
             ),
-            RaisedButton(
-              child: Text('Animate'),
+            IconButton(
+              icon: AnimatedIcon(
+                icon: AnimatedIcons.play_pause,
+                progress: _iconController,
+              ),
               onPressed: () {
-                setState(() {
-                  _size = _isBag ? 200 : 100;
-                  _isBag = !_isBag;
-                });
+                if (_isRotating) {
+                  _controller.stop();
+                  _iconController.reverse();
+                } else {
+                  _controller.repeat();
+                  _iconController.forward();
+                }
+
+                _isRotating = !_isRotating;
               },
-            ),
+            )
           ],
         ),
       ),
     );
   }
 }
+
+// class AnimationPage extends StatefulWidget {
+//   @override
+//   _AnimationPageState createState() => _AnimationPageState();
+// }
+//
+// class _AnimationPageState extends State<AnimationPage> {
+//   bool _isBag = false;
+//   double _size = 100.0;
+//
+//   Tween _animationTween = Tween<double>(begin: 0, end: pi * 2);
+//   Tween _colorTween = ColorTween(begin: Colors.blue, end: Colors.purple);
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Animations'),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             TweenAnimationBuilder<Color>(
+//               // tween: _animationTween,
+//               tween: _colorTween,
+//               duration: Duration(seconds: 3),
+//               builder: (context, Color value, child) {
+//                 return Container(
+//                   color: value,
+//                   height: _size,
+//                   width: _size,
+//                 );                // return Transform.rotate(
+//                 //   angle: value,
+//                 //   child: AnimatedContainer(
+//                 //     duration: Duration(seconds: 1),
+//                 //     color: Colors.blue,
+//                 //     height: _size,
+//                 //     width: _size,
+//                 //   ),
+//                 // );
+//               },
+//             ),
+//             RaisedButton(
+//               child: Text('Animate'),
+//               onPressed: () {
+//                 setState(() {
+//                   _size = _isBag ? 200 : 100;
+//                   _isBag = !_isBag;
+//                 });
+//               },
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
