@@ -1,40 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dicoding_fundamental/provider/done_module_provider.dart';
+import 'package:provider/provider.dart';
 
 class DoneModuleList extends StatelessWidget {
-  final List<String> doneModuleList;
-  DoneModuleList({@required this.doneModuleList});
-
   @override
   Widget build(BuildContext context) {
+    final doneModuleList =
+        Provider.of<DoneModuleProvider>(context, listen: false).doneModuleList;
     return Scaffold(
       appBar: AppBar(
         title: Text('Done Module List'),
       ),
       body: ListView.builder(
-        itemCount: doneModuleList.length,
-        itemBuilder: (context, int index) {
+        itemBuilder: (context, index) {
           return ListTile(
-            title: Text(
-              doneModuleList[index],
-            ),
+            title: Text(doneModuleList[index]),
           );
         },
+        itemCount: doneModuleList.length,
       ),
     );
   }
 }
 
-class ModuleList extends StatefulWidget {
-  final List<String> doneModuleList;
-
-  ModuleList({this.doneModuleList});
-
-  @override
-  _ModuleListState createState() => _ModuleListState();
-}
-
-class _ModuleListState extends State<ModuleList> {
-  final List<String> moduleList = [
+class ModuleList extends StatelessWidget {
+  final List<String> _moduleList = [
     'Modul 1 - Pengenalan Dart',
     'Modul 2 - Memulai Pemrograman dengan Dart',
     'Modul 3 - Dart Fundamental',
@@ -47,21 +37,18 @@ class _ModuleListState extends State<ModuleList> {
     'Modul 10 - Effective Dart',
   ];
 
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: moduleList.length,
-      itemBuilder: (context, int index) {
-        return ModuleTile(
-          moduleName: moduleList[index],
-          isDone: widget.doneModuleList.contains(moduleList[index]),
-          onClick: () {
-            setState(
-              () {
-                widget.doneModuleList.add(
-                  moduleList[index],
-                );
+      itemCount: _moduleList.length,
+      itemBuilder: (context, index) {
+        return Consumer<DoneModuleProvider>(
+          builder: (context, DoneModuleProvider data, widget) {
+            return ModuleTile(
+              moduleName: _moduleList[index],
+              isDone: data.doneModuleList.contains(_moduleList[index]),
+              onClick: () {
+                data.complete(_moduleList[index]);
               },
             );
           },
@@ -76,11 +63,7 @@ class ModuleTile extends StatelessWidget {
   final bool isDone;
   final Function onClick;
 
-  ModuleTile({
-    this.moduleName,
-    this.isDone,
-    this.onClick,
-  });
+  ModuleTile({this.moduleName, this.isDone, this.onClick});
 
   @override
   Widget build(BuildContext context) {

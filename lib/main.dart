@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dicoding_fundamental/done_module_list.dart';
+import 'package:flutter_dicoding_fundamental/provider/done_module_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,13 +11,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return ChangeNotifierProvider(
+      create: (context) => DoneModuleProvider(),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: ModulePage(),
       ),
-      home: ModulePage(),
     );
   }
 }
@@ -40,18 +45,14 @@ class _ModulePageState extends State<ModulePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DoneModuleList(
-                    doneModuleList: doneModuleList,
-                  ),
+                  builder: (context) => DoneModuleList(),
                 ),
               );
             },
           ),
         ],
       ),
-      body: ModuleList(
-        doneModuleList: doneModuleList,
-      ),
+      body: ModuleList(),
     );
   }
 }
