@@ -47,7 +47,6 @@ class _ModuleListState extends State<ModuleList> {
     'Modul 10 - Effective Dart',
   ];
 
-  final List<String> doneModuleList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +55,11 @@ class _ModuleListState extends State<ModuleList> {
       itemBuilder: (context, int index) {
         return ModuleTile(
           moduleName: moduleList[index],
-          isDone: doneModuleList.contains(moduleList[index]),
+          isDone: widget.doneModuleList.contains(moduleList[index]),
           onClick: () {
             setState(
               () {
-                doneModuleList.add(
+                widget.doneModuleList.add(
                   moduleList[index],
                 );
               },
