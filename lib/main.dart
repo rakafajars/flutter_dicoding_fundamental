@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dicoding_fundamental/theme/style.dart';
 import 'package:flutter_dicoding_fundamental/ui/article_web_view.dart';
 import 'package:flutter_dicoding_fundamental/ui/detail_article.dart';
+import 'package:flutter_dicoding_fundamental/ui/home_page.dart';
 import 'package:flutter_dicoding_fundamental/ui/list_page.dart';
 
 void main() {
@@ -36,8 +37,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: NewsListPage.routeName,
+      initialRoute: HomePage.routeName,
       routes: {
+        HomePage.routeName: (context) => HomePage(),
         NewsListPage.routeName: (context) => NewsListPage(),
         ArticleDetailPage.routeName: (context) => ArticleDetailPage(
               article: ModalRoute.of(context).settings.arguments,
