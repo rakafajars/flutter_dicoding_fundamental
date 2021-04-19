@@ -33,6 +33,9 @@ dependencies:
   google_fonts: ^1.1.2
   http: ^0.12.2
   provider: ^4.3.2+1
+  flutter_local_notifications: ^4.0.1+2
+  rxdart: ^0.25.0
+  path_provider: ^1.6.28
 
 dev_dependencies:
   flutter_test:

@@ -4,6 +4,7 @@ import 'package:flutter_dicoding_fundamental/ui/article_web_view.dart';
 import 'package:flutter_dicoding_fundamental/ui/detail_article.dart';
 import 'package:flutter_dicoding_fundamental/ui/home_page.dart';
 import 'package:flutter_dicoding_fundamental/ui/list_page.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 void main() {
   runApp(MyApp());
