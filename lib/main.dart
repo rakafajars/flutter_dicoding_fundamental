@@ -1,11 +1,21 @@
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dicoding_fundamental/ui/home_page.dart';
+import 'package:flutter_dicoding_fundamental/utils/background_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final BackgroundService _service = BackgroundService();
+
+  _service.initializeIsolate();
+
+  AndroidAlarmManager.initialize();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  static const title = 'Simple Alarm Manager';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,20 +24,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-     home: MyHome(),
+     home: HomePage(
+       title: title,
+     ),
     );
   }
 }
 
-class MyHome extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Halo'),
-      ),
-    );
-  }
-}
 
 
