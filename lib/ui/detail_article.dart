@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dicoding_fundamental/common/navigation.dart';
 import 'package:flutter_dicoding_fundamental/data/model/article.dart';
 import 'article_web_view.dart';
 
@@ -48,7 +49,6 @@ class ArticleDetailPage extends StatelessWidget {
                   Text(
                     'Date: ${article.publishedAt}',
                     style: Theme.of(context).textTheme.caption,
-
                   ),
                   SizedBox(
                     height: 10,
@@ -63,7 +63,6 @@ class ArticleDetailPage extends StatelessWidget {
                   Text(
                     article.content,
                     style: Theme.of(context).textTheme.bodyText1,
-
                   ),
                   SizedBox(
                     height: 10,
@@ -71,10 +70,9 @@ class ArticleDetailPage extends StatelessWidget {
                   RaisedButton(
                     child: Text('Read more'),
                     onPressed: () {
-                      Navigator.pushNamed(
-                        context,
+                      Navigation.intentWithData(
                         ArticleWebView.routeName,
-                        arguments: article,
+                        article.url,
                       );
                     },
                   ),

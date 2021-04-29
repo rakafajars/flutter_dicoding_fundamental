@@ -26,13 +26,7 @@ class NewsListPage extends StatelessWidget {
               var article = state.result.articles[index];
               return CardArticle(
                 article: article,
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    ArticleDetailPage.routeName,
-                    arguments: article,
-                  );
-                },
+
               );
             },
           );

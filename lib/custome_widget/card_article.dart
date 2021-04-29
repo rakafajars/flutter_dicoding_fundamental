@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dicoding_fundamental/common/navigation.dart';
+import 'package:flutter_dicoding_fundamental/common/style.dart';
 import 'package:flutter_dicoding_fundamental/data/model/article.dart';
-import 'package:flutter_dicoding_fundamental/theme/style.dart';
+import 'package:flutter_dicoding_fundamental/ui/detail_article.dart';
 
 class CardArticle extends StatelessWidget {
   final Article article;
-  final Function onPressed;
 
   const CardArticle({
     Key key,
     @required this.article,
-    @required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -38,7 +38,10 @@ class CardArticle extends StatelessWidget {
         title: Text(
           article.title ?? "",
         ),
-        onTap: onPressed,
+        onTap: () => Navigation.intentWithData(
+          ArticleDetailPage.routeName,
+          article,
+        ),
       ),
     );
   }

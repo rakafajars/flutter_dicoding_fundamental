@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dicoding_fundamental/custome_widget/platform_widget.dart';
 import 'package:flutter_dicoding_fundamental/data/api/api_service.dart';
 import 'package:flutter_dicoding_fundamental/provider/news_provider.dart';
+import 'package:flutter_dicoding_fundamental/provider/scheduling_provider.dart';
+import 'package:flutter_dicoding_fundamental/ui/detail_article.dart';
 import 'package:flutter_dicoding_fundamental/ui/list_page.dart';
+import 'package:flutter_dicoding_fundamental/ui/setting_page.dart';
+import 'package:flutter_dicoding_fundamental/utils/background_service.dart';
+import 'package:flutter_dicoding_fundamental/utils/notification_helper.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,6 +21,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final NotificationHelper _notificationHelper = NotificationHelper();
+  final BackgroundService _service = BackgroundService();
+
   int _bottomNavIndex = 0;
   static const String _headlineText = 'Headline';
 
@@ -26,7 +34,10 @@ class _HomePageState extends State<HomePage> {
       ),
       child: NewsListPage(),
     ),
-    SettingPage(),
+    ChangeNotifierProvider<SchedulingProvider>(
+      create: (_) => SchedulingProvider(),
+      child: SettingPage(),
+    ),
   ];
 
   List<BottomNavigationBarItem> _bottomNavBarItems = [
@@ -74,19 +85,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    port.listen((_) async {
+      await _service.someTask();
+    });
+    _notificationHelper
+        .configureSelectNotificationSubject(ArticleDetailPage.routeName);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    selectNotificationSubject.close();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PlatformWidget(
       androidBuilder: _buildAndroid,
       iosBuilder: _buildIos,
     );
-  }
-}
-
-class SettingPage extends StatelessWidget {
-  static const String settingsTitle = 'Settings';
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
