@@ -28,16 +28,9 @@ class _HomePageState extends State<HomePage> {
   static const String _headlineText = 'Headline';
 
   List<Widget> _listWidget = [
-    ChangeNotifierProvider(
-      create: (_) => NewsProvider(
-        apiService: ApiService(),
-      ),
-      child: NewsListPage(),
-    ),
-    ChangeNotifierProvider<SchedulingProvider>(
-      create: (_) => SchedulingProvider(),
-      child: SettingPage(),
-    ),
+    NewsListPage(),
+    BookmarksPage(),
+    SettingPage(),
   ];
 
   List<BottomNavigationBarItem> _bottomNavBarItems = [
@@ -46,6 +39,12 @@ class _HomePageState extends State<HomePage> {
         Platform.isIOS ? CupertinoIcons.news : Icons.public,
       ),
       title: Text(_headlineText),
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(
+        Platform.isIOS ? CupertinoIcons.bookmark : Icons.bookmark,
+      ),
+      title: Text('Bookmarks'),
     ),
     BottomNavigationBarItem(
       icon: Icon(
@@ -106,5 +105,12 @@ class _HomePageState extends State<HomePage> {
       androidBuilder: _buildAndroid,
       iosBuilder: _buildIos,
     );
+  }
+}
+
+class BookmarksPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
