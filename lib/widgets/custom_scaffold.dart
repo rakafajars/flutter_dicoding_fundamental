@@ -8,28 +8,9 @@ class CustomScaffold extends StatelessWidget {
 
   CustomScaffold({this.body});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            body,
-            _buildShortAppBar(context),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildShortAppBar(BuildContext context) {
     return Card(
       margin: EdgeInsets.all(0),
-      shape: BeveledRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomRight: Radius.circular(16.0),
-        ),
-      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -49,6 +30,25 @@ class CustomScaffold extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      shape: BeveledRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(16.0),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            body,
+            _buildShortAppBar(context),
+          ],
+        ),
       ),
     );
   }

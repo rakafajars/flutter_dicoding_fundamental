@@ -14,9 +14,7 @@ class SchedulingProvider extends ChangeNotifier {
       print('Scheduling News Activated');
       notifyListeners();
       return await AndroidAlarmManager.periodic(
-        Duration(
-          hours: 24,
-        ),
+        Duration(hours: 24),
         1,
         BackgroundService.callback,
         startAt: DateTimeHelper.format(),

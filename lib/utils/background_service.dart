@@ -1,26 +1,24 @@
+import 'dart:ui';
 import 'dart:isolate';
 
-import 'dart:ui';
-
 import 'package:flutter_dicoding_fundamental/data/api/api_service.dart';
-import 'package:flutter_dicoding_fundamental/main.dart';
-import 'package:flutter_dicoding_fundamental/utils/notification_helper.dart';
+
+import '../main.dart';
+import 'notification_helper.dart';
+
 
 final ReceivePort port = ReceivePort();
 
 class BackgroundService {
-  static BackgroundService _service;
+  static BackgroundService _instance;
   static String _isolateName = 'isolate';
   static SendPort _uiSendPort;
 
-  BackgroundService._createObject();
-
-  factory BackgroundService() {
-    if (_service == null) {
-      _service = BackgroundService._createObject();
-    }
-    return _service;
+  BackgroundService._internal() {
+    _instance = this;
   }
+
+  factory BackgroundService() => _instance ?? BackgroundService._internal();
 
   void initializeIsolate() {
     IsolateNameServer.registerPortWithName(
@@ -34,9 +32,7 @@ class BackgroundService {
     final NotificationHelper _notificationHelper = NotificationHelper();
     var result = await ApiService().topHeadlines();
     await _notificationHelper.showNotification(
-      flutterLocalNotificationsPlugin,
-      result,
-    );
+        flutterLocalNotificationsPlugin, result);
 
     _uiSendPort ??= IsolateNameServer.lookupPortByName(_isolateName);
     _uiSendPort?.send(null);

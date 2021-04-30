@@ -1,5 +1,5 @@
-class ModelArticle {
-  ModelArticle({
+class ArticlesResult {
+  ArticlesResult({
     this.status,
     this.totalResults,
     this.articles,
@@ -9,7 +9,7 @@ class ModelArticle {
   int totalResults;
   List<Article> articles;
 
-  factory ModelArticle.fromJson(Map<String, dynamic> json) => ModelArticle(
+  factory ArticlesResult.fromJson(Map<String, dynamic> json) => ArticlesResult(
         status: json["status"],
         totalResults: json["totalResults"],
         articles: List<Article>.from(
@@ -25,7 +25,6 @@ class ModelArticle {
 
 class Article {
   Article({
-    this.source,
     this.author,
     this.title,
     this.description,
@@ -35,7 +34,6 @@ class Article {
     this.content,
   });
 
-  Source source;
   String author;
   String title;
   String description;
@@ -45,18 +43,16 @@ class Article {
   String content;
 
   factory Article.fromJson(Map<String, dynamic> json) => Article(
-        source: Source.fromJson(json["source"]),
-        author: json["author"],
+        author: json["author"] == null ? null : json["author"],
         title: json["title"],
-        description: json["description"],
+        description: json["description"] == null ? null : json["description"],
         url: json["url"],
-        urlToImage: json["urlToImage"],
+        urlToImage: json["urlToImage"] == null ? null : json["urlToImage"],
         publishedAt: DateTime.parse(json["publishedAt"]),
-        content: json["content"],
+        content: json["content"] == null ? null : json["content"],
       );
 
   Map<String, dynamic> toJson() => {
-        "source": source.toJson(),
         "author": author == null ? null : author,
         "title": title,
         "description": description == null ? null : description,
@@ -64,25 +60,5 @@ class Article {
         "urlToImage": urlToImage == null ? null : urlToImage,
         "publishedAt": publishedAt.toIso8601String(),
         "content": content == null ? null : content,
-      };
-}
-
-class Source {
-  Source({
-    this.id,
-    this.name,
-  });
-
-  dynamic id;
-  String name;
-
-  factory Source.fromJson(Map<String, dynamic> json) => Source(
-        id: json["id"],
-        name: json["name"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
       };
 }

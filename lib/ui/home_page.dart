@@ -2,16 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dicoding_fundamental/custome_widget/platform_widget.dart';
-import 'package:flutter_dicoding_fundamental/data/api/api_service.dart';
-import 'package:flutter_dicoding_fundamental/provider/news_provider.dart';
-import 'package:flutter_dicoding_fundamental/provider/scheduling_provider.dart';
-import 'package:flutter_dicoding_fundamental/ui/detail_article.dart';
-import 'package:flutter_dicoding_fundamental/ui/list_page.dart';
-import 'package:flutter_dicoding_fundamental/ui/setting_page.dart';
+import 'package:flutter_dicoding_fundamental/ui/article_list_page.dart';
+import 'package:flutter_dicoding_fundamental/ui/settings_page.dart';
 import 'package:flutter_dicoding_fundamental/utils/background_service.dart';
 import 'package:flutter_dicoding_fundamental/utils/notification_helper.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_dicoding_fundamental/widgets/platform_widget.dart';
+
+import 'article_detail_page.dart';
+import 'bookmarks_page.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home_page';
@@ -21,36 +19,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final NotificationHelper _notificationHelper = NotificationHelper();
-  final BackgroundService _service = BackgroundService();
-
   int _bottomNavIndex = 0;
   static const String _headlineText = 'Headline';
 
+  final NotificationHelper _notificationHelper = NotificationHelper();
+  final BackgroundService _service = BackgroundService();
+
   List<Widget> _listWidget = [
-    NewsListPage(),
+    ArticleListPage(),
     BookmarksPage(),
-    SettingPage(),
+    SettingsPage(),
   ];
 
   List<BottomNavigationBarItem> _bottomNavBarItems = [
     BottomNavigationBarItem(
-      icon: Icon(
-        Platform.isIOS ? CupertinoIcons.news : Icons.public,
-      ),
+      icon: Icon(Platform.isIOS ? CupertinoIcons.news : Icons.public),
       title: Text(_headlineText),
     ),
     BottomNavigationBarItem(
-      icon: Icon(
-        Platform.isIOS ? CupertinoIcons.bookmark : Icons.bookmark,
-      ),
-      title: Text('Bookmarks'),
+      icon: Icon(Platform.isIOS
+          ? CupertinoIcons.bookmark
+          : Icons.collections_bookmark),
+      title: Text(BookmarksPage.bookmarksTitle),
     ),
     BottomNavigationBarItem(
-      icon: Icon(
-        Platform.isIOS ? CupertinoIcons.settings : Icons.settings,
-      ),
-      title: Text(SettingPage.settingsTitle),
+      icon: Icon(Platform.isIOS ? CupertinoIcons.settings : Icons.settings),
+      title: Text(SettingsPage.settingsTitle),
     ),
   ];
 
@@ -64,7 +58,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: _listWidget[_bottomNavIndex],
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.blue,
         currentIndex: _bottomNavIndex,
         items: _bottomNavBarItems,
         onTap: _onBottomNavTapped,
@@ -74,9 +67,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildIos(BuildContext context) {
     return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(
-        items: _bottomNavBarItems,
-      ),
+      tabBar: CupertinoTabBar(items: _bottomNavBarItems),
       tabBuilder: (context, index) {
         return _listWidget[index];
       },
@@ -86,9 +77,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    port.listen((_) async {
-      await _service.someTask();
-    });
+    port.listen((_) async => await _service.someTask());
     _notificationHelper
         .configureSelectNotificationSubject(ArticleDetailPage.routeName);
   }
@@ -105,12 +94,5 @@ class _HomePageState extends State<HomePage> {
       androidBuilder: _buildAndroid,
       iosBuilder: _buildIos,
     );
-  }
-}
-
-class BookmarksPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }

@@ -1,11 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dicoding_fundamental/data/api/api_service.dart';
 import 'package:flutter_dicoding_fundamental/data/model/article.dart';
-
-/// Untuk mengatur setiap proses yang akan dijalankan di dalam fungsi _fetchAllArticle()
-/// sehingga dapat menampilakn kondisi state yang ada dlam keadaan
-/// Loading, NOData, HasData, Error
-enum ResultState { Loading, NoData, HasData, Error }
+import 'package:flutter_dicoding_fundamental/utils/result_state.dart';
 
 class NewsProvider extends ChangeNotifier {
   final ApiService apiService;
@@ -14,17 +12,16 @@ class NewsProvider extends ChangeNotifier {
     _fetchAllArticle();
   }
 
-  ModelArticle _articlesResult;
+  ArticlesResult _articlesResult;
   String _message = '';
   ResultState _state;
 
   String get message => _message;
 
-  ModelArticle get result => _articlesResult;
+  ArticlesResult get result => _articlesResult;
 
   ResultState get state => _state;
 
-  /// Future dynamic
   Future<dynamic> _fetchAllArticle() async {
     try {
       _state = ResultState.Loading;

@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dicoding_fundamental/custome_widget/custom_dialog.dart';
-import 'package:flutter_dicoding_fundamental/custome_widget/platform_widget.dart';
 import 'package:flutter_dicoding_fundamental/provider/preferences_provider.dart';
 import 'package:flutter_dicoding_fundamental/provider/scheduling_provider.dart';
+import 'package:flutter_dicoding_fundamental/widgets/custom_dialog.dart';
+import 'package:flutter_dicoding_fundamental/widgets/platform_widget.dart';
 import 'package:provider/provider.dart';
 
-class SettingPage extends StatelessWidget {
+class SettingsPage extends StatelessWidget {
   static const String settingsTitle = 'Settings';
 
   Widget _buildAndroid(BuildContext context) {
